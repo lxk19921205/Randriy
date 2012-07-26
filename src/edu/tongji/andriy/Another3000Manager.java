@@ -2,6 +2,7 @@ package edu.tongji.andriy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.util.Pair;
 
@@ -31,7 +32,18 @@ public class Another3000Manager {
 	 * 把背诵的顺序随机打乱一下
 	 */
 	public void RandomizeReciteOrder() {
-		
+		Random random = new Random();
+		for (int i = 0; i < UNIT_COUNT; i++) {
+			int pos1 = random.nextInt(UNIT_COUNT);
+			int pos2 = random.nextInt(UNIT_COUNT);
+			if (pos1 == pos2) {
+				continue;
+			}
+			
+			int temp = recite_order[pos1];
+			recite_order[pos1] = recite_order[pos2];
+			recite_order[pos2] = temp;
+		}
 	}
 	
 	/**

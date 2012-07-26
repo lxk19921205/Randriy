@@ -15,7 +15,8 @@ public class Another3000Activity extends Activity {
 
 	private Another3000Manager manager = null;
 	
-	private Button testButton;
+	private Button testButton1;
+	private Button testButton2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +26,8 @@ public class Another3000Activity extends Activity {
 		manager = new Another3000Manager();
 		
 		
-		testButton = (Button) this.findViewById(R.id.another3000_testButton);
-		testButton.setOnClickListener(new OnClickListener() {
+		testButton1 = (Button) this.findViewById(R.id.another3000_testButton1);
+		testButton1.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -40,6 +41,15 @@ public class Another3000Activity extends Activity {
 				
 				builder.setMessage(msg);
 				builder.create().show();
+			}
+		});
+		
+		testButton2 = (Button) this.findViewById(R.id.another3000_testButton2);
+		testButton2.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				manager.RandomizeReciteOrder();
 			}
 		});
 	}
