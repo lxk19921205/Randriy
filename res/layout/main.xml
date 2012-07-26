@@ -34,4 +34,10 @@
             android:text="整" />
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/to3000Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="背诵再要你命3000" />
+
 </LinearLayout>

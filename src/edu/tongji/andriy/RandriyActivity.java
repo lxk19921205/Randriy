@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ public class RandriyActivity extends Activity {
 
 	private TextView intRangeText;
 	private Button nextIntButton;
+	private Button to3000Button;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -47,6 +49,15 @@ public class RandriyActivity extends Activity {
 			public void onClick(View v) {
 				int result = randomGenerator.nextInt(intRange);
 				ShowIntResult(result);
+			}
+		});
+        
+        to3000Button = (Button) this.findViewById(R.id.to3000Button);
+        to3000Button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Goto3000();
 			}
 		});
     }
@@ -94,5 +105,13 @@ public class RandriyActivity extends Activity {
 			}
 		});
     	builder.create().show();
+    }
+    
+    /**
+     * 进入再要你命3000的界面
+     */
+    private void Goto3000() {
+    	Intent intent = new Intent(this, Another3000Activity.class);
+    	this.startActivity(intent);
     }
 }
