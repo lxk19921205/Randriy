@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
 
+import android.content.Context;
+
 
 public class A3KManager {
 
@@ -27,10 +29,33 @@ public class A3KManager {
 	public A3KManager() {
 		this.SortReciteOrder();
 		
-		Random random = new Random();
-		for (int i = 0; i < UNIT_COUNT/2; i++) {
-			recitedUnits.add(new A3KIndex(random.nextInt(UNIT_COUNT)));
+//		Random random = new Random();
+//		for (int i = 0; i < UNIT_COUNT/2; i++) {
+//			recitedUnits.add(new A3KIndex(random.nextInt(UNIT_COUNT)));
+//		}
+	}
+	
+	/**
+	 * 从数据库中把recite_order和背诵了哪些units读进来
+	 * @param context
+	 */
+	public void LoadFromDB(Context context) {
+		A3KDBHelper helper = new A3KDBHelper(context);
+
+		List<A3KIndex> indices = helper.LoadReciteOrder();
+		if (indices.size() ==UNIT_COUNT ) {
+			this.reciteOrder.clear();
+			this.reciteOrder.addAll(helper.LoadReciteOrder());
 		}
+	}
+	
+	/**
+	 * 把recite_order和背诵了哪些units存到数据库里去
+	 * @param context
+	 */
+	public void SaveIntoDB(Context context) {
+		A3KDBHelper helper = new A3KDBHelper(context);
+		helper.SaveReciteOrder(this.reciteOrder);
 	}
 	
 	/**

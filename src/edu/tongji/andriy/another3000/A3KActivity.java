@@ -11,8 +11,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,6 +41,7 @@ public class A3KActivity extends Activity {
 		this.setContentView(R.layout.another3000_main);
 		
 		manager = new A3KManager();
+		manager.LoadFromDB(this);
 		
 		pickOneButton = (Button) this.findViewById(R.id.a3k_pickOneButton);
 
@@ -51,6 +50,13 @@ public class A3KActivity extends Activity {
 		
 		this.RefreshToReciteList();
 		this.RefreshRecitedList();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		manager.SaveIntoDB(this);
 	}
 
 	@Override
