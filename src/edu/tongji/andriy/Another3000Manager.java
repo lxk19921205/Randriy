@@ -33,12 +33,39 @@ public class Another3000Manager {
 	public Another3000Manager() {
 		for (int i = 0; i < reciteOrder.length; i++) {
 			reciteOrder[i] = i;
+//			recitedUnits.add(reciteOrder[i]);
 		}
 		
 		Random random = new Random();
 		for (int i = 0; i < UNIT_COUNT/2; i++) {
 			recitedUnits.add(random.nextInt(UNIT_COUNT));
 		}
+	}
+	
+	/**
+	 * 拿接下来要背的 @param count 个units
+	 * @return 包含这么些Pair<PDF, UNIT>的List
+	 */
+	public List<Pair<Integer, Integer>> GetNextUnits(int count) {
+		if (count <0 || count > UNIT_COUNT) {
+			throw new IllegalArgumentException("Invalid! 怎么可以拿这么多个units呢！ Caught by Andriy");
+		}
+		
+		List<Pair<Integer, Integer>> unitsList = new ArrayList<Pair<Integer,Integer>>(count);
+		for (int searched = 0, recitePos = 0; searched < count && recitePos < reciteOrder.length; recitePos++) {
+			int total_index = reciteOrder[recitePos];
+			if (!recitedUnits.contains(total_index)) {
+				searched++;
+				
+				if (total_index < 0 || total_index >= UNIT_COUNT) {
+					throw new IllegalArgumentException("Invalid Unit Index!!! Caught by Andriy");
+				}
+				
+				unitsList.add(new Pair<Integer, Integer>(this.ParsePDFIndex(total_index), this.ParseUnitIndex(total_index)));
+			}
+		}
+
+		return unitsList;
 	}
 	
 	/**

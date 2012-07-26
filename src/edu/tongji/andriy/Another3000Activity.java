@@ -35,7 +35,8 @@ public class Another3000Activity extends Activity {
 				
 				List<Pair<Integer, Integer>> orderList;
 //				orderList= manager.GetReciteOrder();
-				orderList = manager.GetRecitedUnits();
+//				orderList = manager.GetRecitedUnits();
+				orderList = manager.GetNextUnits(100);
 				String msg = "";
 				for (Pair<Integer, Integer> pair : orderList) {
 					msg += ("PDF " + (pair.first + 1) + "; UNIT " + (pair.second + 1) + "\n");
