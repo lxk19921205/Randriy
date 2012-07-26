@@ -10,6 +10,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -104,7 +109,40 @@ public class A3KActivity extends Activity {
 		recitedListView.setAdapter(recitedListAdapter);
 	}
 
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = this.getMenuInflater();
+		inflater.inflate(R.menu.a3k_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.a3k_menu_random:
+			manager.RandomizeReciteOrder();
+			toReciteListAdapter.FillData(manager.GetNextUnits());
+			toReciteListAdapter.Refresh();
+			return true;
+			
+		case R.id.a3k_menu_sorted:
+			manager.SortReciteOrder();
+			toReciteListAdapter.FillData(manager.GetNextUnits());
+			toReciteListAdapter.Refresh();
+			return true;
+
+		default:
+			return false;
+		}
+	}
+
+
 	
+	/**
+	 * 用于显示to_recite和recited的ListView的Adapter
+	 * @author Andriy
+	 */
 	private class A3KIndicesListAdapter extends BaseAdapter {
 
 		private final List<A3KIndex> indexList = new ArrayList<A3KIndex>();

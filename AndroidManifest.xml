@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".another3000.A3KActivity"
-            android:label="@string/another3000_label" >
+            android:label="@string/a3k_label" >
         </activity>
     </application>
 

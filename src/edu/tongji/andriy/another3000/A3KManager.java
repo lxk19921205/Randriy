@@ -25,10 +25,7 @@ public class A3KManager {
 	private TreeSet<A3KIndex> recitedUnits = new TreeSet<A3KIndex>();
 	
 	public A3KManager() {
-		for (int i = 0; i < UNIT_COUNT; i++) {
-			reciteOrder.add(new A3KIndex(i));
-//			recitedUnits.add(reciteOrder[i]);
-		}
+		this.SortReciteOrder();
 		
 		Random random = new Random();
 		for (int i = 0; i < UNIT_COUNT/2; i++) {
@@ -99,6 +96,16 @@ public class A3KManager {
 			A3KIndex temp = reciteOrder.get(pos1);
 			reciteOrder.set(pos1, reciteOrder.get(pos2));
 			reciteOrder.set(pos2, temp);
+		}
+	}
+	
+	/**
+	 * ÈÃ±³ËÐµÄË³Ðò»Ö¸´ÕýÐò
+	 */
+	public void SortReciteOrder() {
+		reciteOrder.clear();
+		for (int i = 0; i < UNIT_COUNT; i++) {
+			reciteOrder.add(new A3KIndex(i));
 		}
 	}
 	

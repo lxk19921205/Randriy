@@ -3,6 +3,8 @@
 
     <string name="hello">Hello World, RandriyActivity!</string>
     <string name="app_name">Randriy</string>
-    <string name="another3000_label">Randriy--再要你命3000</string>
+    <string name="a3k_label">Randriy--再要你命3000</string>
+    <string name="a3k_menu_random_title">乱序</string>
+    <string name="a3k_menu_sorted_title">正序</string>
 
 </resources>
