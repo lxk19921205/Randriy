@@ -1,6 +1,7 @@
 package edu.tongji.andriy.another3000;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -84,7 +85,7 @@ public class A3KDBHelper extends SQLiteOpenHelper {
 	 * 将全部的背诵顺序存入数据库
 	 * @param indexList
 	 */
-	public void SaveReciteOrder(List<A3KIndex> indexList) {
+	public void SaveReciteOrder(Collection<A3KIndex> indexList) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		this.DropReciteOrderTable(db);
 		this.CreateReciteOrderTable(db);
@@ -99,27 +100,44 @@ public class A3KDBHelper extends SQLiteOpenHelper {
 		db.endTransaction();
 		db.close();
 	}
-
 	
-//	public void delete(int id) {
-//		SQLiteDatabase db = this.getWritableDatabase();
-//		String where = FIELD_ID + " = ?";
-//		String[] whereValue = {Integer.toString(id)};
-//		
-//		db.delete(TABLE_NAME, where, whereValue);
-//	}
-//	
-//	public void update (int id, String name, String singer, String path) {
-//		SQLiteDatabase db = this.getWritableDatabase();
-//		String where = FIELD_ID + " = ?";
-//		String[] whereValue = {Integer.toString(id)};
-//		
-//		ContentValues cv = new ContentValues();
-//		cv.put(FIELD_NAME, name);
-//		cv.put(FIELD_SINGER, singer);
-//		cv.put(FIELD_PATH, path);
-//
-//		db.update(TABLE_NAME, cv, where, whereValue);
-//	}
+	/**
+	 * 返回全部的背诵过的列表
+	 * @return
+	 */
+	public List<A3KIndex> LoadRecitedList() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.query(A3K_RECITED_LIST_TABLE_NAME, null, null, null, null, null, null);
+
+		List<A3KIndex> indexList = new ArrayList<A3KIndex>(cursor.getCount());
+		cursor.moveToFirst();
+		for (int i = 0; i < cursor.getCount(); i++) {
+			indexList.add(new A3KIndex(cursor.getInt(1)));
+			cursor.moveToNext();
+		}
+		cursor.close();
+		db.close();
+		return indexList;
+	}
+
+	/**
+	 * 将全部的背诵过的列表存入数据库
+	 * @param indexList
+	 */
+	public void SaveRecitedList(Collection<A3KIndex> indexList) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		this.DropRecitedListTable(db);
+		this.CreateRecitedListTable(db);
+
+		db.beginTransaction();
+		for (A3KIndex index : indexList) {
+			ContentValues cv = new ContentValues();
+			cv.put(FIELD_UNIT_INDEX, index.GetTotalIndex());
+			db.insert(A3K_RECITED_LIST_TABLE_NAME, null, cv);
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		db.close();
+	}
 
 }

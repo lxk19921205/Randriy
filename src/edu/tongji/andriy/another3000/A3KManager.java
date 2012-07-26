@@ -28,11 +28,6 @@ public class A3KManager {
 	
 	public A3KManager() {
 		this.SortReciteOrder();
-		
-//		Random random = new Random();
-//		for (int i = 0; i < UNIT_COUNT/2; i++) {
-//			recitedUnits.add(new A3KIndex(random.nextInt(UNIT_COUNT)));
-//		}
 	}
 	
 	/**
@@ -47,6 +42,9 @@ public class A3KManager {
 			this.reciteOrder.clear();
 			this.reciteOrder.addAll(helper.LoadReciteOrder());
 		}
+		
+		this.recitedUnits.clear();
+		this.recitedUnits.addAll(helper.LoadRecitedList());
 	}
 	
 	/**
@@ -56,6 +54,7 @@ public class A3KManager {
 	public void SaveIntoDB(Context context) {
 		A3KDBHelper helper = new A3KDBHelper(context);
 		helper.SaveReciteOrder(this.reciteOrder);
+		helper.SaveRecitedList(this.recitedUnits);
 	}
 	
 	/**
