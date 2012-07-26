@@ -57,6 +57,13 @@ public class A3KManager {
 	}
 	
 	/**
+	 * @return 接下来将要背的全部那些units
+	 */
+	public List<A3KIndex> GetNextUnits() {
+		return this.GetNextUnits(UNIT_COUNT);
+	}
+	
+	/**
 	 * @return 那些已经背过的units，一个装有Another3000Index的List
 	 */
 	public List<A3KIndex> GetRecitedUnits() {
