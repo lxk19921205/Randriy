@@ -18,7 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Another3000Activity"></activity>
+        <activity
+            android:name=".Another3000Activity"
+            android:label="@string/another3000_label" >
+        </activity>
     </application>
 
 </manifest>
