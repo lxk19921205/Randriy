@@ -1,19 +1,20 @@
-package edu.tongji.andriy;
+package edu.tongji.andriy.another3000;
 
 import java.util.List;
+
+import edu.tongji.andriy.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class Another3000Activity extends Activity {
+public class A3KActivity extends Activity {
 
-	private Another3000Manager manager = null;
+	private A3KManager manager = null;
 	
 	private Button testButton1;
 	private Button testButton2;
@@ -23,7 +24,7 @@ public class Another3000Activity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.another3000_main);
 		
-		manager = new Another3000Manager();
+		manager = new A3KManager();
 		
 		
 		testButton1 = (Button) this.findViewById(R.id.another3000_testButton1);
@@ -31,15 +32,15 @@ public class Another3000Activity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new Builder(Another3000Activity.this);
+				AlertDialog.Builder builder = new Builder(A3KActivity.this);
 				
-				List<Pair<Integer, Integer>> orderList;
+				List<A3KIndex> orderList;
 //				orderList= manager.GetReciteOrder();
-//				orderList = manager.GetRecitedUnits();
-				orderList = manager.GetNextUnits(100);
+				orderList = manager.GetRecitedUnits();
+//				orderList = manager.GetNextUnits(100);
 				String msg = "";
-				for (Pair<Integer, Integer> pair : orderList) {
-					msg += ("PDF " + (pair.first + 1) + "; UNIT " + (pair.second + 1) + "\n");
+				for (A3KIndex index : orderList) {
+					msg += ("PDF " + (index.GetPDF() + 1) + "; UNIT " + (index.GetUnit() + 1) + "\n");					
 				}
 				
 				builder.setMessage(msg);
@@ -52,7 +53,21 @@ public class Another3000Activity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				manager.RandomizeReciteOrder();
+//				manager.RandomizeReciteOrder();
+				
+				AlertDialog.Builder builder = new Builder(A3KActivity.this);
+				
+				List<A3KIndex> orderList;
+//				orderList= manager.GetReciteOrder();
+//				orderList = manager.GetRecitedUnits();
+				orderList = manager.GetNextUnits(100);
+				String msg = "";
+				for (A3KIndex index : orderList) {
+					msg += ("PDF " + (index.GetPDF() + 1) + "; UNIT " + (index.GetUnit() + 1) + "\n");					
+				}
+				
+				builder.setMessage(msg);
+				builder.create().show();
 			}
 		});
 	}

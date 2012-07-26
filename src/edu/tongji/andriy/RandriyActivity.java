@@ -2,6 +2,8 @@ package edu.tongji.andriy;
 
 import java.util.Random;
 
+import edu.tongji.andriy.another3000.A3KActivity;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -111,7 +113,7 @@ public class RandriyActivity extends Activity {
      * 进入再要你命3000的界面
      */
     private void Goto3000() {
-    	Intent intent = new Intent(this, Another3000Activity.class);
+    	Intent intent = new Intent(this, A3KActivity.class);
     	this.startActivity(intent);
     }
 }

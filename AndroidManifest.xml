@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Another3000Activity"
+            android:name=".another3000.A3KActivity"
             android:label="@string/another3000_label" >
         </activity>
     </application>
