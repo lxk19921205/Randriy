@@ -9,6 +9,7 @@ import edu.tongji.andriy.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -26,9 +27,9 @@ import android.widget.TextView;
 public class A3KActivity extends Activity {
 
 	private A3KManager manager = null;
+
 	
-	private Button testButton1;
-	private Button testButton2;
+	private Button pickOneButton;
 	
 	private ListView toReciteListView;
 	private ListView recitedListView;
@@ -43,70 +44,64 @@ public class A3KActivity extends Activity {
 		
 		manager = new A3KManager();
 		
-//		testButton1 = (Button) this.findViewById(R.id.a3k_testButton1);
-//		testButton2 = (Button) this.findViewById(R.id.a3k_testButton2);
-		testButton1 = new Button(this);
-		testButton2 = new Button(this);
+		pickOneButton = (Button) this.findViewById(R.id.a3k_pickOneButton);
 
 		toReciteListView = (ListView) this.findViewById(R.id.a3k_toReciteListView);
 		recitedListView = (ListView) this.findViewById(R.id.a3k_recitedListView);
 		
-		toReciteListAdapter.FillData(manager.GetNextUnits());
-		recitedListAdapter.FillData(manager.GetRecitedUnits());
+		this.RefreshToReciteList();
+		this.RefreshRecitedList();
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		
-		testButton1.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				AlertDialog.Builder builder = new Builder(A3KActivity.this);
-				
-				List<A3KIndex> orderList;
-//				orderList= manager.GetReciteOrder();
-				orderList = manager.GetRecitedUnits();
-//				orderList = manager.GetNextUnits(100);
-				toReciteListAdapter.FillData(orderList);
-				toReciteListAdapter.notifyDataSetChanged();
-				String msg = "";
-				for (A3KIndex index : orderList) {
-					msg += ("PDF " + (index.GetPDF() + 1) + "; UNIT " + (index.GetUnit() + 1) + "\n");					
-				}
-				
-				builder.setMessage(msg);
-//				builder.create().show();
-			}
-		});
-		
-		testButton2.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-//				manager.RandomizeReciteOrder();
-				
-				AlertDialog.Builder builder = new Builder(A3KActivity.this);
-				
-				List<A3KIndex> orderList;
-//				orderList= manager.GetReciteOrder();
-//				orderList = manager.GetRecitedUnits();
-				orderList = manager.GetNextUnits(100);
-				recitedListAdapter.FillData(orderList);
-				recitedListAdapter.notifyDataSetChanged();
-				String msg = "";
-				for (A3KIndex index : orderList) {
-					msg += ("PDF " + (index.GetPDF() + 1) + "; UNIT " + (index.GetUnit() + 1) + "\n");					
-				}
-				
-				builder.setMessage(msg);
-//				builder.create().show();
-			}
-		});
-		
 		toReciteListView.setAdapter(toReciteListAdapter);
 		recitedListView.setAdapter(recitedListAdapter);
+		
+		pickOneButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				List<A3KIndex> indices = manager.GetNextUnits(1);
+				AlertDialog.Builder builder = new Builder(A3KActivity.this);
+				builder.setTitle("PICK ONE");
+				if (indices.isEmpty()) {
+					builder.setMessage("好高兴哦，都背完了！");
+				}
+				else {
+					final A3KIndex index = indices.get(0);
+					builder.setMessage(index.toString());
+					builder.setPositiveButton("DONE", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							manager.SetUnitStudied(index, true);
+							RefreshToReciteList();
+							RefreshRecitedList();
+						}
+					});
+					builder.setNegativeButton("GO", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					});
+				}
+				builder.create().show();
+			}
+		});
+	}
+	
+	private void RefreshToReciteList() {
+		toReciteListAdapter.FillData(manager.GetNextUnits());
+		toReciteListAdapter.notifyDataSetChanged();
+	}
+	
+	private void RefreshRecitedList() {
+		recitedListAdapter.FillData(manager.GetRecitedUnits());
+		recitedListAdapter.notifyDataSetChanged();
 	}
 
 
@@ -184,19 +179,8 @@ public class A3KActivity extends Activity {
 				convertView = textView;
 			}
 			else {
-				A3KIndex index = this.getItem(position);
-				
-				String pdfString = Integer.toString(index.GetPDF() + 1);
-				if (index.GetPDF()+1 < 10) {
-					pdfString = "0" + pdfString;
-				}
-				String unitString = Integer.toString(index.GetUnit() + 1);
-				if (index.GetUnit()+1 < 10) {
-					unitString = "0" + unitString;
-				}
-				
 				TextView textView = new TextView(A3KActivity.this);
-				textView.setText("List_" + pdfString + " -- " + " Unit_" + unitString);
+				textView.setText(this.getItem(position).toString());
 				convertView = textView;
 			}
 			

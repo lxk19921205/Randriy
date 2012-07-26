@@ -99,4 +99,19 @@ public class A3KIndex implements Comparable<A3KIndex>{
 		return this.GetTotalIndex() - another.GetTotalIndex();
 	}
 
+	@Override
+	public String toString() {
+		String pdfString = Integer.toString(this.pdfIndex + 1);
+		if (this.pdfIndex+1 < 10) {
+			pdfString = "0" + pdfString;
+		}
+		
+		String unitString = Integer.toString(this.unitIndex + 1);
+		if (this.unitIndex+1 < 10) {
+			unitString = "0" + unitString;
+		}
+		
+		return "List_" + pdfString + " -- " + " Unit_" + unitString;
+	}
+
 }
