@@ -59,6 +59,13 @@ public class A3KManager {
 	}
 	
 	/**
+	 * 清空全部的背过的东西
+	 */
+	public void ClearRecited() {
+		this.recitedUnits.clear();
+	}
+	
+	/**
 	 * 拿接下来要背的 @param count 个units
 	 * @return 包含这么些Another3000Index的List
 	 */

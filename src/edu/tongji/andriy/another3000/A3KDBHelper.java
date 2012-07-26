@@ -89,12 +89,14 @@ public class A3KDBHelper extends SQLiteOpenHelper {
 		this.DropReciteOrderTable(db);
 		this.CreateReciteOrderTable(db);
 
-		ContentValues cv = new ContentValues();
+		db.beginTransaction();
 		for (A3KIndex index : indexList) {
-			cv.clear();
+			ContentValues cv = new ContentValues();
 			cv.put(FIELD_UNIT_INDEX, index.GetTotalIndex());
 			db.insert(A3K_RECITE_ORDER_TABLE_NAME, null, cv);
 		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
 		db.close();
 	}
 

@@ -26,8 +26,8 @@ public class A3KActivity extends Activity {
 
 	private A3KManager manager = null;
 
-	
 	private Button pickOneButton;
+	private Button clearDoneButton;
 	
 	private ListView toReciteListView;
 	private ListView recitedListView;
@@ -44,6 +44,7 @@ public class A3KActivity extends Activity {
 		manager.LoadFromDB(this);
 		
 		pickOneButton = (Button) this.findViewById(R.id.a3k_pickOneButton);
+		clearDoneButton = (Button) this.findViewById(R.id.a3k_clearDoneButton);
 
 		toReciteListView = (ListView) this.findViewById(R.id.a3k_toReciteListView);
 		recitedListView = (ListView) this.findViewById(R.id.a3k_recitedListView);
@@ -56,7 +57,14 @@ public class A3KActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		
-		manager.SaveIntoDB(this);
+		Thread thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				manager.SaveIntoDB(A3KActivity.this);				
+			}
+		});
+		thread.start();
 	}
 
 	@Override
@@ -95,6 +103,31 @@ public class A3KActivity extends Activity {
 						}
 					});
 				}
+				builder.create().show();
+			}
+		});
+		
+		clearDoneButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new Builder(A3KActivity.this);
+				builder.setTitle("CLEAR ALL RECITED, ARE YOU SURE?");
+				builder.setPositiveButton("CLEAR", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						manager.ClearRecited();
+						RefreshToReciteList();
+						RefreshRecitedList();
+					}
+				});
+				builder.setNegativeButton("KEEP IT", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
 				builder.create().show();
 			}
 		});
