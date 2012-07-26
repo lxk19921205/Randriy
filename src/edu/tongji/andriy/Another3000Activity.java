@@ -33,7 +33,9 @@ public class Another3000Activity extends Activity {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new Builder(Another3000Activity.this);
 				
-				List<Pair<Integer, Integer>> orderList = manager.GetReciteOrder();
+				List<Pair<Integer, Integer>> orderList;
+//				orderList= manager.GetReciteOrder();
+				orderList = manager.GetRecitedUnits();
 				String msg = "";
 				for (Pair<Integer, Integer> pair : orderList) {
 					msg += ("PDF " + (pair.first + 1) + "; UNIT " + (pair.second + 1) + "\n");
