@@ -2,6 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/a3k_menu_random" android:title="@string/a3k_menu_random_title"></item>
     <item android:id="@+id/a3k_menu_sorted" android:title="@string/a3k_menu_sorted_title"></item>
+    <item android:id="@+id/a3k_menu_import" android:title="@string/a3k_menu_import_title"></item>
+    <item android:id="@+id/a3k_menu_export" android:title="@string/a3k_menu_export_title"></item>
     
 
 </menu>

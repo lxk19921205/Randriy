@@ -38,7 +38,7 @@ public class A3KManager {
 		A3KDBHelper helper = new A3KDBHelper(context);
 
 		List<A3KIndex> indices = helper.LoadReciteOrder();
-		if (indices.size() ==UNIT_COUNT ) {
+		if (indices.size() == UNIT_COUNT) {
 			this.reciteOrder.clear();
 			this.reciteOrder.addAll(helper.LoadReciteOrder());
 		}
@@ -103,6 +103,7 @@ public class A3KManager {
 	/**
 	 * 根据 @param recited，将 @param index 设置为背过或者没背过
 	 */
+	@Deprecated
 	public void SetUnitStudied(A3KIndex index, boolean recited) {
 		if (recited) {
 			recitedUnits.add(index);
@@ -110,6 +111,14 @@ public class A3KManager {
 		else {
 			recitedUnits.remove(index);
 		}
+	}
+	
+	/**
+	 * clear current recited_units, add those in @param units
+	 */
+	public void setRecitedUnits(List<A3KIndex> units) {
+		this.recitedUnits.clear();
+		this.recitedUnits.addAll(units);
 	}
 	
 	/**

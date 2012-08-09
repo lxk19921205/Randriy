@@ -6,5 +6,7 @@
     <string name="a3k_label">Randriy--再要你命3000</string>
     <string name="a3k_menu_random_title">乱序</string>
     <string name="a3k_menu_sorted_title">正序</string>
+    <string name="a3k_menu_import_title">导入</string>
+    <string name="a3k_menu_export_title">导出</string>
 
 </resources>

@@ -1,5 +1,12 @@
 package edu.tongji.andriy.another3000;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +18,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,9 +29,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class A3KActivity extends Activity {
 
+	private static final String EXTERNAL_DATA_FILENAME = "randriy_a3k_recited.dat";
+	
 	private A3KManager manager = null;
 
 	private Button pickOneButton;
@@ -38,7 +49,7 @@ public class A3KActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.another3000_main);
+		this.setContentView(R.layout.a3k_main);
 		
 		manager = new A3KManager();
 		manager.LoadFromDB(this);
@@ -135,12 +146,12 @@ public class A3KActivity extends Activity {
 	
 	private void RefreshToReciteList() {
 		toReciteListAdapter.FillData(manager.GetNextUnits());
-		toReciteListAdapter.notifyDataSetChanged();
+		toReciteListAdapter.Refresh();
 	}
 	
 	private void RefreshRecitedList() {
 		recitedListAdapter.FillData(manager.GetRecitedUnits());
-		recitedListAdapter.notifyDataSetChanged();
+		recitedListAdapter.Refresh();
 	}
 
 
@@ -156,21 +167,103 @@ public class A3KActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.a3k_menu_random:
 			manager.RandomizeReciteOrder();
-			toReciteListAdapter.FillData(manager.GetNextUnits());
-			toReciteListAdapter.Refresh();
+			this.RefreshToReciteList();
 			return true;
 			
 		case R.id.a3k_menu_sorted:
 			manager.SortReciteOrder();
-			toReciteListAdapter.FillData(manager.GetNextUnits());
-			toReciteListAdapter.Refresh();
+			this.RefreshToReciteList();
+			return true;
+			
+		case R.id.a3k_menu_import: 
+			this.doImport();
+			return true;
+			
+		case R.id.a3k_menu_export:
+			this.doExport();
 			return true;
 
 		default:
 			return false;
 		}
 	}
+	
+	/**
+	 * Import data from SDCard
+	 */
+	private void doImport() {
+		if (!this.isSDCardReady()) {
+			Toast.makeText(this, "SDCard not ready", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		File inputFile = new File(this.getExternalFilesDir(null), EXTERNAL_DATA_FILENAME);
+		if (!inputFile.exists()) {
+			Toast.makeText(this, "No previous data", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		List<A3KIndex> recitedUnits = new ArrayList<A3KIndex>();
+		try {
+			FileInputStream fis = new FileInputStream(inputFile);
+			DataInputStream dis = new DataInputStream(fis);
+			while (true) {
+				try {
+					int index = dis.readInt();
+					recitedUnits.add(new A3KIndex(index));					
+				}
+				catch (IOException e) {
+					break;
+				}
+			}
+			dis.close();
+			fis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		this.manager.setRecitedUnits(recitedUnits);
+		Toast.makeText(this, "Imported", Toast.LENGTH_SHORT).show();
+		this.RefreshToReciteList();
+		this.RefreshRecitedList();
+	}
+	
+	/**
+	 * Export data to SDCard
+	 */
+	private void doExport() {
+		if (!this.isSDCardReady()) {
+			Toast.makeText(this, "SDCard not ready", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		File outputFile = new File(this.getExternalFilesDir(null), EXTERNAL_DATA_FILENAME);
+		List<A3KIndex> recitedUnits = this.manager.GetRecitedUnits();
+		try {
+			FileOutputStream fos = new FileOutputStream(outputFile, false);
+			DataOutputStream dos = new DataOutputStream(fos);
+			for (A3KIndex unit : recitedUnits) {
+				dos.writeInt(unit.GetTotalIndex());
+			}
+			dos.close();
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Toast.makeText(this, "Exported", Toast.LENGTH_SHORT).show();
+	}
 
+	/**
+	 * @return whether SDCard is mounted
+	 */
+	private boolean isSDCardReady() {
+		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+	}
 
 	
 	/**
