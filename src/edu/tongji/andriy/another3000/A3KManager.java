@@ -103,7 +103,6 @@ public class A3KManager {
 	/**
 	 * 根据 @param recited，将 @param index 设置为背过或者没背过
 	 */
-	@Deprecated
 	public void SetUnitStudied(A3KIndex index, boolean recited) {
 		if (recited) {
 			recitedUnits.add(index);
